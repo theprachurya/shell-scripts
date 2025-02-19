@@ -54,6 +54,9 @@ hwclock --systohc
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 
+# Set the keyboard layout
+echo "KEYMAP=us" > /etc/vconsole.conf
+
 # Set the hostname
 echo "zen-zen" > /etc/hostname
 
@@ -62,6 +65,15 @@ mkinitcpio -P
 
 # Set the root password
 echo "root:ninja123" | chpasswd
+
+# Install the bootloader (GRUB)
+pacman -S grub os-prober
+
+# Install GRUB bootloader to the MBR (for BIOS systems)
+grub-install --target=i386-pc /dev/sda
+
+# Generate the GRUB configuration file
+grub-mkconfig -o /boot/grub/grub.cfg
 
 EOF
 
